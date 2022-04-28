@@ -1,6 +1,7 @@
 package com.github.audwit.kafka.tutorial1;
 
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -11,15 +12,20 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ProducerDemoWithCallback {
+public class ProducerDemoKeys {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException, ExecutionException {
 		
-		final Logger logger = LoggerFactory.getLogger(ProducerDemoWithCallback.class);
+		final Logger logger = LoggerFactory.getLogger(ProducerDemoKeys.class);
 		
 		System.out.println("Hello world");
 		
 		String bootstrapServers = "127.0.0.1:9092";
+		
+		String topic = "first_topic";
+		String key;
+		String message = "Hello!";
+		
 		//Create producer properties
 		Properties properties = new Properties();
 //		properties.setProperty("bootstrap.servers", bootstrapServers);
@@ -33,8 +39,12 @@ public class ProducerDemoWithCallback {
 		KafkaProducer<String, String> producer = new KafkaProducer<String, String>(properties);
 		
 		// Create producer record
-		for(int i=0; i<30; i++) {
-		ProducerRecord<String, String> record = new ProducerRecord<String, String>("first_topic", "hello again!" + i);
+		for(int i=0; i<10; i++) {
+			
+		key = Integer.toString(i);
+		ProducerRecord<String, String> record = new ProducerRecord<String, String>(topic, key, message + i);
+		
+		logger.info("The key is:" + key);
 		
 		//Send data. As this is asynchronous this will not work until flushing or closing the producer
 		producer.send(record, new Callback() {
@@ -52,7 +62,7 @@ public class ProducerDemoWithCallback {
 				else
 					logger.error("Error while producing " + exception);
 			}
-		});
+		}).get();
 		
 		}
 		
