@@ -33,7 +33,7 @@ public class ProducerDemo {
 		KafkaProducer<String, String> producer = new KafkaProducer<String, String>(properties);
 		
 		// Create producer record
-		ProducerRecord<String, String> record = new ProducerRecord<String, String>("first_topic", "hello again!");
+		ProducerRecord<String, String> record = new ProducerRecord<String, String>("first_topic", "Hello Alien!");
 		
 		//Send data. As this is asynchronous this will not work until flushing or closing the producer
 		producer.send(record);

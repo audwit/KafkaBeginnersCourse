@@ -33,8 +33,8 @@ public class ProducerDemoWithCallback {
 		KafkaProducer<String, String> producer = new KafkaProducer<String, String>(properties);
 		
 		// Create producer record
-		for(int i=0; i<30; i++) {
-		ProducerRecord<String, String> record = new ProducerRecord<String, String>("first_topic", "hello again!" + i);
+		for(int i=0; i<1000; i++) {
+		ProducerRecord<String, String> record = new ProducerRecord<String, String>("second_topic", "hello Alien Gonjales!" + i);
 		
 		//Send data. As this is asynchronous this will not work until flushing or closing the producer
 		producer.send(record, new Callback() {
